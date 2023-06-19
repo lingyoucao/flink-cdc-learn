@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration status="warn" monitorInterval="300">
+    <appenders>
+        <!-- 输出控制台的配置 -->
+        <console name="console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{MM-dd HH:mm:ss} [%-5level] [%42.42C{2.}:%-4.5L] [%10.20t] - %m%n"/>
+        </console>
+
+        <RollingFile name="rollingfile"
+                     fileName="${sys:user.dir}/logs/app.log"
+                     filePattern="${sys:user.dir}/logs/app-%d{yyyy-MM-dd-HH}-%i.log">
+            <ThresholdFilter level="INFO" onMatch="ACCEPT" onMismatch="DENY"/>
+            <PatternLayout pattern="%d{MM-dd HH:mm:ss} [%-5level] [%C.%M:%L] [%t] - %m%n"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy/>
+                <SizeBasedTriggeringPolicy size="50 MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="10">
+                <Delete basePath="${sys:user.dir}/logs" maxDepth="1">
+                    <IfLastModified age="1H">
+                        <IfAny>
+                            <IfAccumulatedFileCount exceeds="5"/>
+                        </IfAny>
+                    </IfLastModified>
+                </Delete>
+            </DefaultRolloverStrategy>
+        </RollingFile>
+    </appenders>
+
+    <loggers>
+        <logger name="org.apache.zookeeper" level="WARN"></logger>
+        <logger name="org.apache.flink.metrics.MetricGroup" level="ERROR"></logger>
+        <logger name="org.apache.flink.runtime.util.ZooKeeperUtils" level="WARN"></logger>
+        <logger name="org.apache.flink.runtime.leaderretrieval.ZooKeeperLeaderRetrievalDriver" level="WARN"></logger>
+        <logger name="org.apache.flink.shaded.org.apache.curator.framework" level="WARN"></logger>
+        <logger name="org.apache.flink.shaded.akka.org.jboss.netty.channel.DefaultChannelPipeline" level="OFF"></logger>
+        <logger name="org.apache.flink.shaded.akka.org.jboss.netty.channel.DefaultChannelPipeline" level="OFF"></logger>
+        <!--打印动态生成的代码 -->
+        <logger name="org.apache.flink.table.runtime.generated" level="INFO"></logger>
+        <logger name="com.newland.bd.utils.gexpression.FuncCalUtils" level="ERROR"></logger>
+
+        <root level="debug">
+            <appender-ref ref="console"/>
+            <appender-ref ref="rollingfile"/>
+        </root>
+    </loggers>
+</configuration>
