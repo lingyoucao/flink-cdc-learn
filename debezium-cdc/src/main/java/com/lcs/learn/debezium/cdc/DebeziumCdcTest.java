@@ -23,7 +23,7 @@ public class DebeziumCdcTest {
         props.setProperty("offset.storage", "org.apache.kafka.connect.storage.FileOffsetBackingStore");
         // windows下相当于是代码所在盘的起始路径
         props.setProperty("offset.storage.file.filename", "/tmp/offsets.dat");
-        props.setProperty("offset.flush.interval.ms", "60000");
+        props.setProperty("offset.flush.interval.ms", "10000");
         /* begin connector properties */
         props.setProperty("database.hostname", "10.1.4.139");
         props.setProperty("database.port", "3306");
