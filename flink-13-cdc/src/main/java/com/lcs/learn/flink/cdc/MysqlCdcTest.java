@@ -6,6 +6,8 @@ import com.ververica.cdc.debezium.JsonDebeziumDeserializationSchema;
 import org.apache.flink.api.common.eventtime.WatermarkStrategy;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.configuration.Configuration;
+import org.apache.flink.table.catalog.ObjectPath;
+
 /**
  * Created by lcs on 2023/6/13.
  *
@@ -20,10 +22,11 @@ public class MysqlCdcTest {
                 .port(3306)
                 .databaseList("test")
                 //.tableList("test.t_user_info")
-                .tableList("test.t_client")
+                .tableList("test.t_user_no_primary")
                 //.tableList("test.t_user_info.*")
                 .username("biapp")
                 .password("biapp")
+                .chunkKeyColumn(new ObjectPath("test","t_user_no_primary"),"name")
                 .includeSchemaChanges(true)
                 .deserializer(new JsonDebeziumDeserializationSchema())
                 .build();
@@ -40,7 +43,7 @@ public class MysqlCdcTest {
         env.enableCheckpointing(3000);
 
         env.fromSource(mySqlSource, WatermarkStrategy.noWatermarks(), "MySQL Source")
-                .setParallelism(4)
+                .setParallelism(1)
                 .print().setParallelism(1);
 
         env.execute("Print MySQL Snapshot + Binlog");

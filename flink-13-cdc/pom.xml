@@ -31,7 +31,7 @@
         <dependency>
             <groupId>com.ververica</groupId>
             <artifactId>flink-sql-connector-mysql-cdc</artifactId>
-            <version>2.3.0</version>
+            <version>2.4.0</version>
         </dependency>
 
         <!-- OB CDC 企业版OB依赖oceanbase-client-->
